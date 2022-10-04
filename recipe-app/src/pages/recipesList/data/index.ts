@@ -1,0 +1,1 @@
+export { useGetRecipes } from './useGetRecipes';
