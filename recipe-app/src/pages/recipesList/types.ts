@@ -1,10 +1,10 @@
 export interface Ingredient {
-    name: string
+  name: string;
 }
 
 export interface Recipe {
-    name: string,
-    description: string,
-    id: number,
-    ingredients: Ingredient[]
+  name: string;
+  description: string;
+  id: number;
+  ingredients: Ingredient[];
 }

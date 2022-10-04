@@ -1,1 +1,1 @@
-export { useGetRecipes } from './useGetRecipes';
+export { useGetRecipes } from "./useGetRecipes";

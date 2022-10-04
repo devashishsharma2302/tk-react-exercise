@@ -1,10 +1,8 @@
-import './App.css';
-import { RecipesListPage } from './pages/recipesList/RecipesListPage';
+import "./App.css";
+import { RecipesListPage } from "./pages/recipesList/RecipesListPage";
 
 function App() {
-  return (
-    <RecipesListPage />
-  );
+  return <RecipesListPage />;
 }
 
 export default App;
