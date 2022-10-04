@@ -1,29 +1,19 @@
 import axios, { AxiosError } from "axios";
 import { useEffect, useState } from "react";
+import { Recipe } from "../types";
 
 
 const BASE_URL = 'http://localhost:8000/api/recipe'
 
-
-interface Ingredient {
-    name: string
-}
-
-interface Recipe {
-    name: string,
-    description: string,
-    id: number,
-    ingredients: Ingredient[]
-}
-
-interface UseGetRecipesApi {
+export interface TGetRecipesApi {
     recipes: Recipe[],
     isLoading: boolean,
     error: AxiosError | boolean,
     loadRecipes: () => void
 }
 
-export const useGetRecipes = (): UseGetRecipesApi => {
+
+export const useGetRecipes = (): TGetRecipesApi => {
 
     const [isLoading, setLoading] = useState(false);
     const [recipes, setRecipes] = useState([]);
@@ -41,6 +31,7 @@ export const useGetRecipes = (): UseGetRecipesApi => {
     }
 
     useEffect(() => {
+        console.log("asdsa")
         loadRecipes();
     }, [])
 

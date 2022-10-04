@@ -1,9 +1,9 @@
 import './App.css';
-import { RecipesList } from './pages/recipesList/RecipesList';
+import { RecipesListPage } from './pages/recipesList/RecipesListPage';
 
 function App() {
   return (
-    <RecipesList />
+    <RecipesListPage />
   );
 }
 
