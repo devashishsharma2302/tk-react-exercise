@@ -1,4 +1,4 @@
-import { Ingredient } from "../types";
+import { Ingredient } from "../../types";
 import { useField } from "react-final-form";
 import { Chip, Grid, Typography } from "@mui/material";
 import { useState } from "react";
@@ -34,6 +34,8 @@ export const EditIngredientsField = () => {
       <Grid item xs={6} textAlign="left">
         {ingredients.map((ingredient, index) => (
           <Chip
+            key={`${ingredient.name}_${index}`}
+            data-testid={`${ingredient.name}_${index}`}
             label={ingredient.name}
             onDelete={() => {
               handleDelete(index);

@@ -1,27 +1,14 @@
-import {
-  Button,
-  Card,
-  CardActions,
-  CardContent,
-  Chip,
-  Grid,
-  Stack,
-  styled,
-  Typography,
-} from "@mui/material";
+import { Button, Grid } from "@mui/material";
 import { useState } from "react";
 import { useRecipesApi } from "../data";
 import { Recipe } from "../types";
 import { EditRecipeModal } from "./EditRecipeModal";
+import { RecipeCard } from "./RecipeCard";
 
 type TProps = {
   recipes: Recipe[];
   loadRecipes: () => void;
 };
-
-const RecipeCard = styled(Card)({
-  padding: "8px",
-});
 
 export const RecipesList = ({ recipes, loadRecipes }: TProps) => {
   const [isEditModalOpen, setEditModalOpen] = useState(false);
@@ -53,48 +40,12 @@ export const RecipesList = ({ recipes, loadRecipes }: TProps) => {
       </Grid>
 
       {recipes.sort(compareRecipesForSort).map((recipe) => (
-        <Grid item xs={8}>
-          <RecipeCard>
-            <CardContent>
-              <Typography variant="h5" component="div" marginBottom={"8px"}>
-                {recipe.name}
-              </Typography>
-
-              <Typography
-                color="text.secondary"
-                component="div"
-                marginBottom={"8px"}
-              >
-                {recipe.description}
-              </Typography>
-
-              {recipe.ingredients.length > 0 && (
-                <>
-                  <Typography
-                    color={"text.secondary"}
-                    fontWeight="bold"
-                    marginBottom={"8px"}
-                  >
-                    {"Ingredients:"}
-                  </Typography>
-                  <Stack direction="row" spacing={1}>
-                    {recipe.ingredients.map((ingredient) => (
-                      <Chip label={ingredient.name} />
-                    ))}
-                  </Stack>
-                </>
-              )}
-            </CardContent>
-            <CardActions>
-              <Button onClick={() => handleEditRecipe(recipe)}>{"Edit"}</Button>
-              <Button
-                color="error"
-                onClick={() => handleDeleteRecipe(recipe.id)}
-              >
-                {"Delete"}
-              </Button>
-            </CardActions>
-          </RecipeCard>
+        <Grid item xs={8} data-testid={recipe.id} key={recipe.id}>
+          <RecipeCard
+            recipe={recipe}
+            handleDeleteRecipe={handleDeleteRecipe}
+            handleEditRecipe={handleEditRecipe}
+          />
         </Grid>
       ))}
       {/* Reusing the same modal for edit and create */}

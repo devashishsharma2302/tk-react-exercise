@@ -1,7 +1,7 @@
-import { Recipe } from "../types";
 import { Form, Field } from "react-final-form";
 import { Button, Grid, Modal, Paper, styled, Typography } from "@mui/material";
 import { EditIngredientsField } from "./EditIngredientsField";
+import { Recipe } from "../../types";
 
 type TProps = {
   title: string;
