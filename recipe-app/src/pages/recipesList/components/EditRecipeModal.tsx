@@ -2,13 +2,13 @@ import { Recipe } from "../types";
 import { Form, Field } from "react-final-form";
 import { Button, Grid, Modal, Paper, styled, Typography } from "@mui/material";
 import { EditIngredientsField } from "./EditIngredientsField";
-import { usePatchRecipe } from "../data/usePatchRecipe";
 
 type TProps = {
-  recipe: Recipe | {};
+  title: string;
+  initialData: Recipe | {};
   isOpen: boolean;
   onClose: () => void;
-  onSuccess: () => void;
+  onSuccess: (newRecipe: Recipe) => void;
 };
 
 const ModalContent = styled(Paper)({
@@ -25,40 +25,29 @@ const ModalContent = styled(Paper)({
 });
 
 const SaveButton = styled(Button)({
-    position: 'absolute',
-    bottom: '20px',
-    right: '40px'
-})
+  position: "absolute",
+  bottom: "20px",
+  right: "40px",
+});
 
 export const EditRecipeModal = ({
-  recipe,
+  initialData,
   isOpen,
   onClose,
   onSuccess,
+  title,
 }: TProps) => {
-  const { editRecipe } = usePatchRecipe();
-
-  const onSave = (newRecipe: Recipe) => {
-    editRecipe({
-      id: newRecipe.id,
-      data: newRecipe,
-    }).then(() => {
-      onSuccess();
-      onClose();
-    });
-  };
-
   return (
     <Modal open={isOpen} onClose={onClose}>
       <ModalContent>
         <Typography variant="h4" marginBottom={"20px"}>
-          {"Edit Recipe"}
+          {title}
         </Typography>
 
         <Form
-          initialValues={recipe || {}}
+          initialValues={initialData}
           onSubmit={(newValues) => {
-            onSave(newValues as Recipe);
+            onSuccess(newValues as Recipe);
           }}
         >
           {({ handleSubmit }) => (
@@ -118,7 +107,9 @@ export const EditRecipeModal = ({
                 </Grid>
               </Grid>
 
-              <SaveButton variant="contained" onClick={() => handleSubmit()}>{"Save"}</SaveButton>
+              <SaveButton variant="contained" onClick={() => handleSubmit()}>
+                {"Save"}
+              </SaveButton>
             </>
           )}
         </Form>

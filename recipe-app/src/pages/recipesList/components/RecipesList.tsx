@@ -10,6 +10,7 @@ import {
   Typography,
 } from "@mui/material";
 import { useState } from "react";
+import { useRecipesApi } from "../data";
 import { Recipe } from "../types";
 import { EditRecipeModal } from "./EditRecipeModal";
 
@@ -24,11 +25,20 @@ const RecipeCard = styled(Card)({
 
 export const RecipesList = ({ recipes, loadRecipes }: TProps) => {
   const [isEditModalOpen, setEditModalOpen] = useState(false);
+  const [isAddRecipeModalOpen, setAddRecipeModalOpen] = useState(false);
   const [editableRecipe, setEditableRecipe] = useState({});
+
+  const { editRecipe, createRecipe, deleteRecipe } = useRecipesApi();
 
   const handleEditRecipe = (recipe: Recipe) => {
     setEditModalOpen(true);
     setEditableRecipe(recipe);
+  };
+
+  const handleDeleteRecipe = (id: number) => {
+    deleteRecipe({ id }).then(() => {
+      loadRecipes();
+    });
   };
 
   const compareRecipesForSort = (recipe1: Recipe, recipe2: Recipe) =>
@@ -36,6 +46,12 @@ export const RecipesList = ({ recipes, loadRecipes }: TProps) => {
 
   return (
     <>
+      <Grid item xs={8} textAlign="right">
+        <Button onClick={() => setAddRecipeModalOpen(true)}>
+          {"Add New Recipe"}
+        </Button>
+      </Grid>
+
       {recipes.sort(compareRecipesForSort).map((recipe) => (
         <Grid item xs={8}>
           <RecipeCard>
@@ -71,15 +87,45 @@ export const RecipesList = ({ recipes, loadRecipes }: TProps) => {
             </CardContent>
             <CardActions>
               <Button onClick={() => handleEditRecipe(recipe)}>{"Edit"}</Button>
+              <Button
+                color="error"
+                onClick={() => handleDeleteRecipe(recipe.id)}
+              >
+                {"Delete"}
+              </Button>
             </CardActions>
           </RecipeCard>
         </Grid>
       ))}
+      {/* Reusing the same modal for edit and create */}
       <EditRecipeModal
-        recipe={editableRecipe}
+        title={"Edit Recipe"}
+        initialData={editableRecipe}
         isOpen={isEditModalOpen}
         onClose={() => setEditModalOpen(false)}
-        onSuccess={loadRecipes}
+        onSuccess={(newRecipe) => {
+          editRecipe({
+            id: newRecipe.id,
+            data: newRecipe,
+          }).then(() => {
+            loadRecipes();
+            setEditModalOpen(false);
+          });
+        }}
+      />
+      <EditRecipeModal
+        initialData={{}}
+        title={"Add New Recipe"}
+        isOpen={isAddRecipeModalOpen}
+        onClose={() => setAddRecipeModalOpen(false)}
+        onSuccess={(newRecipe) => {
+          createRecipe({
+            data: newRecipe,
+          }).then(() => {
+            loadRecipes();
+            setAddRecipeModalOpen(false);
+          });
+        }}
       />
     </>
   );

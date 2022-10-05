@@ -1,4 +1,3 @@
-import "./App.css";
 import { RecipesListPage } from "./pages/recipesList/RecipesListPage";
 
 function App() {

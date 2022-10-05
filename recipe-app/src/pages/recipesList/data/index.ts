@@ -1,1 +1,1 @@
-export { useGetRecipes } from "./useGetRecipes";
+export { useRecipesApi } from "./useRecipesApi";

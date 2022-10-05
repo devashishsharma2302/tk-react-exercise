@@ -1,9 +1,14 @@
 import { Grid, Typography } from "@mui/material";
+import { useEffect } from "react";
 import { ErrorMessage, Loader, RecipesList } from "./components";
-import { useGetRecipes } from "./data";
+import { useRecipesApi } from "./data";
 
 export const RecipesListPage = () => {
-  const { recipes, isLoading, error, loadRecipes } = useGetRecipes();
+  const { recipes, isLoading, error, loadRecipes } = useRecipesApi();
+
+  useEffect(() => {
+    loadRecipes();
+  }, []);
 
   return (
     <Grid container direction="row" justifyContent="center" rowSpacing={2}>
