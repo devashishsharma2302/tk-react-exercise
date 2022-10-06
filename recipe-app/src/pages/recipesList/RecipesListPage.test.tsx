@@ -1,4 +1,4 @@
-import { render, screen, waitFor, within } from "@testing-library/react";
+import { act, render, screen, waitFor, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { BASE_URL } from "./constants";
 import { RecipesListPage } from "./RecipesListPage";
@@ -54,24 +54,22 @@ describe("Test Recipes List Page", () => {
   });
 
   it("should call delete api on clicking delete on recipe card", async () => {
-    render(<RecipesListPage />);
-    const recipeCard = await screen.findByTestId("1");
+    // eslint-disable-next-line testing-library/no-unnecessary-act
+    await act(async () => {
+      render(<RecipesListPage />);
+    });
+    const recipeCard = screen.getByTestId("1");
     expect(recipeCard).toBeInTheDocument();
-    const deleteButton =
-      recipeCard && (await within(recipeCard).findByText(/Delete/));
+    const deleteButton = recipeCard && within(recipeCard).getByText(/Delete/);
 
-    deleteButton && userEvent.click(deleteButton);
+    await act(async () => {
+        deleteButton && userEvent.click(deleteButton);
+    })
 
-    await waitFor(() => {
-      expect(axios.delete).toBeCalledTimes(1);
-    });
+    expect(axios.delete).toBeCalledTimes(1);
 
-    await waitFor(() => {
-      expect(axios.delete).toBeCalledWith(`${BASE_URL}/recipes/1/`);
-    });
-    
-    await waitFor(() => {
-      expect(axios.get).toBeCalledTimes(2);
-    });
+    expect(axios.delete).toBeCalledWith(`${BASE_URL}/recipes/1/`);
+
+    expect(axios.get).toBeCalledTimes(2);
   });
 });
